@@ -33,6 +33,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion, AnimatePresence } from "framer-motion";
 import { formatRelative } from "date-fns";
+import { ShareMenu } from "@/components/ui/share-menu";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -43,17 +44,17 @@ export default function DashboardPage() {
   const [selectedGeneration, setSelectedGeneration] = useState<any | null>(null);
 
   // Fetch tools
-  const { data: tools } = useQuery({
+  const { data: tools = [] } = useQuery<any[]>({
     queryKey: ["/api/tools"],
   });
 
   // Fetch user's saved generations if premium
   const { 
-    data: generations, 
+    data: generations = [], 
     isLoading: generationsLoading,
     isError: generationsError,
     refetch: refetchGenerations
-  } = useQuery({
+  } = useQuery<any[]>({
     queryKey: ["/api/generations"],
     enabled: user?.premium === true,
   });
@@ -367,6 +368,10 @@ export default function DashboardPage() {
                                   }}>
                                     <Edit className="h-4 w-4" />
                                   </Button>
+                                  <ShareMenu 
+                                    title={selectedGeneration.title}
+                                    content={selectedGeneration.output}
+                                  />
                                   <Button variant="outline" size="icon" onClick={() => handleDeleteGeneration(selectedGeneration.id)}>
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
