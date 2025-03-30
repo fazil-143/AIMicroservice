@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { ShareMenu } from "@/components/ui/share-menu";
 
 interface ToolModalProps {
   isOpen: boolean;
@@ -236,6 +237,10 @@ export default function ToolModal({ isOpen, onClose, tool }: ToolModalProps) {
                   <Button variant="outline" size="icon" onClick={copyToClipboard}>
                     <Copy className="h-4 w-4" />
                   </Button>
+                  <ShareMenu 
+                    title={saveTitle}
+                    content={generatedContent}
+                  />
                   <Button variant="outline" size="icon" onClick={() => setStatus("input")}>
                     <RefreshCw className="h-4 w-4" />
                   </Button>

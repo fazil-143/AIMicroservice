@@ -139,9 +139,35 @@ export default function DashboardPage() {
                         </span>
                       </p>
                       <Progress value={(user?.dailyGenerations || 0) * 33.33} className="h-2" />
-                      <a href="#pricing" className="mt-3 block rounded-md bg-primary py-2 text-center text-sm font-medium text-white hover:bg-primary-600">
-                        Upgrade to Premium
-                      </a>
+                      <div className="flex mt-3 space-x-2">
+                        <a href="#pricing" className="flex-1 block rounded-md bg-primary py-2 text-center text-sm font-medium text-white hover:bg-primary-600">
+                          Upgrade to Premium
+                        </a>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-auto"
+                          onClick={async () => {
+                            try {
+                              await apiRequest("POST", "/api/upgrade");
+                              toast({
+                                title: "Upgraded",
+                                description: "Your account has been upgraded to Premium!"
+                              });
+                              // Refresh the user data
+                              queryClient.invalidateQueries({ queryKey: ['/api/user'] });
+                            } catch (error: any) {
+                              toast({
+                                variant: "destructive",
+                                title: "Upgrade Failed",
+                                description: error.message || "Failed to upgrade account."
+                              });
+                            }
+                          }}
+                        >
+                          Test Upgrade
+                        </Button>
+                      </div>
                     </div>
                   )}
                 </CardContent>
