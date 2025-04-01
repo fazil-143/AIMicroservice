@@ -1,4 +1,12 @@
 import { Link } from "wouter";
+import { 
+  FaTwitter, 
+  FaFacebook, 
+  FaInstagram, 
+  FaLinkedin, 
+  FaGithub, 
+  FaYoutube 
+} from "react-icons/fa";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -28,10 +36,12 @@ export default function Footer() {
   };
   
   const socialLinks = [
-    { icon: "alternate_email", label: "Twitter", href: "#" },
-    { icon: "facebook", label: "Facebook", href: "#" },
-    { icon: "photo_camera", label: "Instagram", href: "#" },
-    { icon: "group", label: "LinkedIn", href: "#" },
+    { icon: <FaTwitter className="h-5 w-5" />, label: "Twitter", href: "#" },
+    { icon: <FaFacebook className="h-5 w-5" />, label: "Facebook", href: "#" },
+    { icon: <FaInstagram className="h-5 w-5" />, label: "Instagram", href: "#" },
+    { icon: <FaLinkedin className="h-5 w-5" />, label: "LinkedIn", href: "#" },
+    { icon: <FaGithub className="h-5 w-5" />, label: "GitHub", href: "#" },
+    { icon: <FaYoutube className="h-5 w-5" />, label: "YouTube", href: "#" },
   ];
 
   return (
@@ -56,7 +66,7 @@ export default function Footer() {
                   className="text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-primary-400" 
                   aria-label={link.label}
                 >
-                  <span className="material-icons">{link.icon}</span>
+                  {link.icon}
                 </a>
               ))}
             </div>

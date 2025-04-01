@@ -33,6 +33,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion, AnimatePresence } from "framer-motion";
 import { formatRelative } from "date-fns";
+import { ShareMenu } from "@/components/ui/share-menu";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -43,17 +44,17 @@ export default function DashboardPage() {
   const [selectedGeneration, setSelectedGeneration] = useState<any | null>(null);
 
   // Fetch tools
-  const { data: tools } = useQuery({
+  const { data: tools = [] } = useQuery<any[]>({
     queryKey: ["/api/tools"],
   });
 
   // Fetch user's saved generations if premium
   const { 
-    data: generations, 
+    data: generations = [], 
     isLoading: generationsLoading,
     isError: generationsError,
     refetch: refetchGenerations
-  } = useQuery({
+  } = useQuery<any[]>({
     queryKey: ["/api/generations"],
     enabled: user?.premium === true,
   });
@@ -138,9 +139,35 @@ export default function DashboardPage() {
                         </span>
                       </p>
                       <Progress value={(user?.dailyGenerations || 0) * 33.33} className="h-2" />
-                      <a href="#pricing" className="mt-3 block rounded-md bg-primary py-2 text-center text-sm font-medium text-white hover:bg-primary-600">
-                        Upgrade to Premium
-                      </a>
+                      <div className="flex mt-3 space-x-2">
+                        <a href="#pricing" className="flex-1 block rounded-md bg-primary py-2 text-center text-sm font-medium text-white hover:bg-primary-600">
+                          Upgrade to Premium
+                        </a>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-auto"
+                          onClick={async () => {
+                            try {
+                              await apiRequest("POST", "/api/upgrade");
+                              toast({
+                                title: "Upgraded",
+                                description: "Your account has been upgraded to Premium!"
+                              });
+                              // Refresh the user data
+                              queryClient.invalidateQueries({ queryKey: ['/api/user'] });
+                            } catch (error: any) {
+                              toast({
+                                variant: "destructive",
+                                title: "Upgrade Failed",
+                                description: error.message || "Failed to upgrade account."
+                              });
+                            }
+                          }}
+                        >
+                          Test Upgrade
+                        </Button>
+                      </div>
                     </div>
                   )}
                 </CardContent>
@@ -367,6 +394,10 @@ export default function DashboardPage() {
                                   }}>
                                     <Edit className="h-4 w-4" />
                                   </Button>
+                                  <ShareMenu 
+                                    title={selectedGeneration.title}
+                                    content={selectedGeneration.output}
+                                  />
                                   <Button variant="outline" size="icon" onClick={() => handleDeleteGeneration(selectedGeneration.id)}>
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
