@@ -16,7 +16,8 @@ export default function HeroSection() {
               Supercharge Your Content Creation
             </h1>
             <p className="mb-8 text-lg md:text-xl">
-              Harness the power of AI to generate high-quality content in seconds. Blogs, ideas, summaries - all at your fingertips.
+              Harness the power of AI to generate high-quality content in
+              seconds. Blogs, ideas, summaries - all at your fingertips.
             </p>
             <div className="flex flex-wrap gap-4">
               <Button
